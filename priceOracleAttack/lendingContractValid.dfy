@@ -12,16 +12,7 @@
  * under the License.
  */
 
-include "./NonNativeTypes.dfy"
-include "./Contract.dfy"
-  // include "./Token.dfy"
 
-import opened NonNativeTypes
-
-datatype Msg = Msg(sender: Account, value: uint256)
-datatype Try<T> = Success(v: T) | Revert()
-
-type Address = Account
 
 class LendingContract  {
 
@@ -67,7 +58,6 @@ class LendingContract  {
     ensures lastprice == old(lastprice)
     ensures collateral == old(collateral)
   {
-    // lastprice := token1 / token2;
     token1 := tok1;
     token2 := tok2;
   }
@@ -75,7 +65,6 @@ class LendingContract  {
   method mutate ()
     requires valid()
     requires inv >= 4
-    // requires token1 < MAX_UINT256 && token2 < MAX_UINT256
     ensures timestamp == old(timestamp) && lastinquire == old(lastinquire)
 
     modifies this
@@ -91,7 +80,7 @@ class LendingContract  {
     var data1m := token1 * m;
     var data2m := token2 / m;
     update(data1m, data2m);
-    assume(token1 != old(token1) && token2 != old(token2));
+    // assume(token1 != old(token1) && token2 != old(token2));
   }
 
   method transactions(amount : nat) returns ( price : nat)
@@ -101,6 +90,7 @@ class LendingContract  {
     requires amount  > token1 / token2 * collateral
     requires inv >= 4
     requires lastinquire == timestamp
+    // requires lastprice == token1 / token2
 
     modifies this
 
@@ -108,12 +98,8 @@ class LendingContract  {
 
   {
     lastprice := token1 / token2;
-    // assert(lastprice * collateral < amount);
     mutate();
-    // test();
     price := customized_price();
-    // assert(price == lastprice);
-    // assert(lastprice * collateral < amount);
   }
 
   method  mut() returns (a: nat)
