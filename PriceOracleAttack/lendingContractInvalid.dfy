@@ -74,11 +74,12 @@ class LendingContract  {
     update(data1m, data2m);
   }
 
-  method transactions(amount : nat) returns ( price : nat)
+  /*we assume that the first attempt to use feedback data from price oracle has failed, and see if the second attempt will succeed after mutate the data.*/
+  method test(amount : nat) returns ( price : nat)
     requires valid()
     requires amount > 0
     requires collateral != 0
-    requires amount  > token1 / token2 * collateral
+    requires amount  > token1 / token2 * collateral //this precondition means the former attempt to use feedback data from price oracle has failed
     requires inv >= 4
 
     modifies this
@@ -94,9 +95,7 @@ class LendingContract  {
     ensures a > 0 && a != 1
     ensures inv % a == 0 && token2 % a == 0
 
-  method test()
-    ensures token1 != old(token1) && token2 != old(token2)
-    ensures token1 * token2 == old(token1) * old(token2) == inv
+
 }
 
 method {:extern} havoc() returns (a: nat)
