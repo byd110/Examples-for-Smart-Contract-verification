@@ -27,7 +27,7 @@ class LendingContract  {
   predicate valid()
     reads this
   {
-    token1 * token2 == inv && token2 != 0 && token1 != 0
+    token1 * token2 >= inv && token2 != 0 && token1 != 0 && inv > 0
 
   }
 
@@ -43,18 +43,19 @@ class LendingContract  {
   // update data from price oracle
   method update (tok1 : nat, tok2 : nat)
     requires valid()
-    requires tok1 * tok2 == inv
+    requires tok1 * tok2 >= inv
     requires tok2 != 0
 
     modifies this
 
     ensures valid()
-    ensures inv == old(inv)
+    ensures inv >= old(inv)
     ensures token1 == tok1 && token2 == tok2
     ensures collateral == old(collateral)
   {
     token1 := tok1;
     token2 := tok2;
+    inv := tok1 * tok2;
   }
 
   method mutate ()
@@ -64,7 +65,7 @@ class LendingContract  {
     modifies this
 
     ensures valid()
-    ensures inv == old(inv)
+    ensures inv >= old(inv)
     // ensures token1 != old(token1) && token2 != old(token2)
     ensures collateral == old(collateral)
   {

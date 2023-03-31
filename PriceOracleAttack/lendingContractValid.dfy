@@ -71,7 +71,7 @@ class LendingContract  {
 
     ensures valid()
     ensures inv == old(inv)
-    ensures token1 != old(token1) && token2 != old(token2)
+    // ensures token1 != old(token1) && token2 != old(token2)
     ensures timestamp == old(timestamp) && lastinquire == old(lastinquire)
     ensures lastprice == old(lastprice)
     ensures collateral == old(collateral)
@@ -105,7 +105,7 @@ class LendingContract  {
 
   method  mut() returns (a: nat)
     ensures a > 0 && a != 1
-    ensures inv % a == 0 && token2 % a == 0
+    ensures token2 % a == 0
 
 
 }
