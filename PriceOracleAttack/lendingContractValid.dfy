@@ -71,13 +71,14 @@ class LendingContract  {
 
     ensures valid()
     ensures inv == old(inv)
-    // ensures token1 != old(token1) && token2 != old(token2)
+    ensures token1 != old(token1) && token2 != old(token2)
     ensures timestamp == old(timestamp) && lastinquire == old(lastinquire)
     ensures lastprice == old(lastprice)
     ensures collateral == old(collateral)
   {
     var m : nat := mut();
     var data1m := token1 * m;
+    greater_than_before(token1, m);
     var data2m := token2 / m;
     update(data1m, data2m);
     // assume(token1 != old(token1) && token2 != old(token2));
@@ -113,5 +114,7 @@ class LendingContract  {
 method {:extern} havoc() returns (a: nat)
   ensures a != 0
 
-
+lemma greater_than_before(a: nat, b:nat)
+  requires a > 1 || b > 1
+  ensures a * b > a && a * b > b
 
