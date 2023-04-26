@@ -115,6 +115,6 @@ method {:extern} havoc() returns (a: nat)
   ensures a != 0
 
 lemma greater_than_before(a: nat, b:nat)
-  requires a > 1 || b > 1
-  ensures a * b > a && a * b > b
+  requires a > 0 && b > 1
+  ensures a * b > a
 
