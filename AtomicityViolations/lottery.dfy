@@ -26,17 +26,6 @@ class Lottery {
   var drawingPhase : bool ; // whether the owner is drawing
   ghost var totalbought : nat;
 
-  // invoked every day to reset a round
-  //  function reset()  onlyOwner {
-  //  delete tickets;
-  //  winningId = 0; drawingPhase = false;
-  //  }
-  //  function buy(uint64 id, uint amount)  {
-  //  require(winningId == 0, "already drawn");
-  //  require(!drawingPhase, "drawing")
-  //  receivePayment(msg.sender, amount),
-  //  tickets[msg.sender][id] += amount;
-  //  }
 
   method enterDrawingPhase()
     modifies this
