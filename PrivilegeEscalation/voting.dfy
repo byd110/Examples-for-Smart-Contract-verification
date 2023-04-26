@@ -1,16 +1,3 @@
-/*
- * Copyright 2022 ConsenSys Software Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may
- * not use this file except in compliance with the License. You may obtain
- * a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software dis-
- * tributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations
- * under the License.
- */
 
 include "./NonNativeTypes.dfy"
 include "./Contract.dfy"
@@ -55,8 +42,6 @@ class Vote {
     ensures sum(votingToken) == totalamount
     //  requires sum(votingToken) == totalamount as nat
   {
-    //  require(votingToken.balanceOf(address(this))*2 >
-    //  votingToken.totalSupply(), "vote failed");
     owner := proposal.newOwner;
   }
   constructor(msg: Msg)
@@ -70,7 +55,5 @@ class Vote {
 
 lemma mapAddVoting(m: map<Address, uint256>, k: Address, v: nat)
   requires (if k in m then m[k] else 0) as nat + v <= MAX_UINT256
-  //  m ++ [k, v] is m with the value at k incremented by v (0 is not in key)
-  //  sum(m ++ [k,v]) == sum(m) + v
   ensures sum(m[k := ((if k in m then m[k] else 0) as nat + v) as uint256]) >= sum(m) + v
 

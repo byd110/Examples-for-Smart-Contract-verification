@@ -18,10 +18,6 @@ include "./Token.dfy"
 
 import opened NonNativeTypes
 
-// datatype Msg = Msg(sender: Account, value: uint256)
-
-// type Address = Account
-
 
 class Lottery {
   // user address -> lottery id -> count
@@ -61,11 +57,8 @@ class Lottery {
   {
     winningId := id;
   }
-  // claim reward for winners
-  //  function claimReward() external {
-  //  require(winningId != 0, "not drawn");
-  //  ...
-  //  }
+
+
   method multiBuy(ids: seq<uint128>, amounts : seq<uint>, msg:Msg)
 
     requires winningId == 0
