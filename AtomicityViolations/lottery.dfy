@@ -1,16 +1,4 @@
-/*
- * Copyright 2022 ConsenSys Software Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may
- * not use this file except in compliance with the License. You may obtain
- * a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software dis-
- * tributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations
- * under the License.
- */
+
 
 include "./NonNativeTypes.dfy"
 include "./Contract.dfy"
@@ -51,12 +39,12 @@ class Lottery {
   method multiBuy(ids: seq<uint128>, amounts : seq<uint>, msg:Msg)
 
     requires winningId == 0
+    requires |amounts| == |ids|
     modifies this
     ensures drawingPhase == false
   {
     var totalAmount : uint := 0;
     var i := 0;
-    assume(|amounts| >= |ids|);
     // assert(); // make sure it's buying phase.
     while i < |ids| {
       var index : uint128 := ids[i];
@@ -66,15 +54,14 @@ class Lottery {
       assume((if index in tickets[msg.sender] then tickets[msg.sender][index] else 0) as nat + amount as nat < MAX_UINT256);
       m := m[index := (if index in tickets[msg.sender] then tickets[msg.sender][index] else 0) + amount];
       tickets := tickets[msg.sender := m];
-      //   tickets[msg.sender] := tickets[msg.sender][index := tickets[msg.sender][index] + amount];
-      //   tickets := tickets[msg.sender := tickets[msg.sender][ids[i] := tickets[msg.sender][ids[i]] + amounts[i]]];
+      // tickets[msg.sender] := tickets[msg.sender][index := tickets[msg.sender][index] + amount];
+      // tickets := tickets[msg.sender := tickets[msg.sender][ids[i] := tickets[msg.sender][ids[i]] + amounts[i]]];
       assume(totalAmount as nat + amount as nat < MAX_UINT256);
       totalAmount := totalAmount + amount;
       i := i + 1;
     }
   }
-  //  receivePayment(msg.sender, totalAmount),
-  //  }
+
   constructor(msg: Msg)
   {
     tickets := map[];
