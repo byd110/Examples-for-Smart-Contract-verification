@@ -46,6 +46,7 @@ class LendingContract  {
   {
     token1 := tok1;
     token2 := tok2;
+    inv := token1 * token2;
   }
 
   method mutate ()
